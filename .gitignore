@@ -27,6 +27,7 @@ database-debug.log
 # ============================
 .env
 .env.*
+!.env.example
 *.secret
 *.key
 service-account*.json
