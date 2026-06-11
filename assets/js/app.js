@@ -811,24 +811,91 @@ if (cartList) renderCart();
 /* ==========================================================================
    CHECKOUT - build the order, send to WhatsApp, save history, clear cart
    ========================================================================== */
+/* ---- Coupon helpers ----------------------------------------------------- */
+function getCoupons() {
+  return remoteItems('coupons');
+}
+
+/**
+ * Validate a coupon code against the Firestore coupons collection.
+ * Returns { valid, coupon, discount, error } where discount is the rupee amount off.
+ */
+function validateCoupon(code, subtotal) {
+  if (!code) return { valid: false, coupon: null, discount: 0, error: '' };
+  const coupons = getCoupons();
+  const coupon = coupons.find((c) => String(c.code || '').trim().toLowerCase() === code.toLowerCase());
+  if (!coupon) return { valid: false, coupon: null, discount: 0, error: `Coupon "${code}" does not exist.` };
+  if (coupon.active === false) return { valid: false, coupon, discount: 0, error: `Coupon "${code}" is no longer active.` };
+  const minOrder = Number(coupon.minOrder || coupon.min_order || 0);
+  if (minOrder > 0 && subtotal < minOrder) {
+    return { valid: false, coupon, discount: 0, error: `Minimum order ${money(minOrder)} required for this coupon.` };
+  }
+  let discount = 0;
+  if (coupon.type === 'percent' || coupon.discountType === 'percent') {
+    const pct = Number(coupon.value || coupon.discount || 0);
+    discount = Math.round((subtotal * pct) / 100);
+    const cap = Number(coupon.maxDiscount || coupon.cap || 0);
+    if (cap > 0) discount = Math.min(discount, cap);
+  } else {
+    discount = Number(coupon.value || coupon.discount || 0);
+  }
+  return { valid: true, coupon, discount, error: '' };
+}
+
 const checkoutSummary = document.querySelector('[data-checkout-summary]');
 const checkoutCoupon = document.querySelector('[data-checkout-coupon]');
+const couponError = (() => {
+  if (!checkoutCoupon) return null;
+  const el = document.createElement('p');
+  el.style.cssText = 'color:var(--danger,#e53e3e);font-size:.85rem;margin:.25rem 0 0;min-height:1.2em';
+  el.id = 'coupon-error-msg';
+  checkoutCoupon.closest('label')?.after(el);
+  return el;
+})();
+
+let appliedCouponDiscount = 0;   // rupee amount currently applied
+
+/**
+ * Extended cart totals that factor in a validated coupon discount.
+ */
+function cartTotalsWithCoupon(couponDiscount = 0) {
+  const { subtotal, scheme, delivery } = cartTotals();
+  const grand = Math.max(0, subtotal - scheme - couponDiscount + delivery);
+  return { subtotal, scheme, delivery, grand, couponDiscount };
+}
+
 function renderCheckoutSummary() {
   if (!checkoutSummary) return;
-  const { subtotal, scheme, delivery, grand } = cartTotals();
   const cart = getCart();
   const priceViews = getCartPriceViews();
-  const coupon = (checkoutCoupon?.value || '').trim();
+  const code = (checkoutCoupon?.value || '').trim();
+  const { subtotal, scheme, delivery } = cartTotals();
+
+  /* validate coupon and update inline error */
+  let couponDiscount = 0;
+  if (code) {
+    const result = validateCoupon(code, subtotal - scheme);
+    if (couponError) couponError.textContent = result.error;
+    if (result.valid) couponDiscount = result.discount;
+  } else {
+    if (couponError) couponError.textContent = '';
+  }
+  appliedCouponDiscount = couponDiscount;
+
+  const grand = Math.max(0, subtotal - scheme - couponDiscount + delivery);
   const rows = Object.keys(cart).filter((id) => PMAP[id]).map((id) => {
     const p = PMAP[id]; const qty = Number(cart[id]);
     const view = priceViews[id] || 'wholesale';
     const unitPrice = priceForView(p, view);
     return `<p><span>${p.name} × ${qty} <small>(${view === 'retail' ? 'Retail' : 'Wholesale'})</small></span><strong>${money(unitPrice * qty)}</strong></p>`;
   }).join('');
+  const couponRow = code
+    ? `<p class="save"><span>Coupon (${code})</span><strong>-${money(couponDiscount)}</strong></p>`
+    : '';
   checkoutSummary.innerHTML = (rows || '<p class="empty-state">Cart is empty.</p>') +
     `<hr><p><span>Subtotal</span><strong>${money(subtotal)}</strong></p>` +
     `<p class="save"><span>Scheme Discount</span><strong>-${money(scheme)}</strong></p>` +
-    `<p><span>Discount Coupon</span><strong>${coupon || 'Not applied'}</strong></p>` +
+    couponRow +
     `<p><span>Delivery</span><strong>${delivery ? money(delivery) : 'FREE'}</strong></p>` +
     `<p class="grand"><span>Grand Total</span><strong>${money(grand)}</strong></p>`;
 }
@@ -836,6 +903,7 @@ if (checkoutSummary) {
   renderCheckoutSummary();
   checkoutCoupon?.addEventListener('input', renderCheckoutSummary);
 }
+
 
 /* prefill name/phone/address from saved profile */
 const prof = getProfile();
@@ -881,7 +949,20 @@ if (placeOrder) {
       return;
     }
     const payment = document.querySelector('input[name="payment"]:checked')?.value || 'Cash on Delivery';
-    const { subtotal, scheme, delivery, grand, count } = cartTotals();
+    const { subtotal, scheme, delivery, count } = cartTotals();
+
+    /* re-validate coupon at submit time */
+    const couponCode = (checkoutCoupon?.value || '').trim();
+    let couponDiscount = 0;
+    if (couponCode) {
+      const result = validateCoupon(couponCode, subtotal - scheme);
+      if (!result.valid) {
+        if (confirmation) { confirmation.hidden = false; confirmation.textContent = result.error || 'Invalid coupon code. Please remove it or enter a valid one.'; }
+        return;
+      }
+      couponDiscount = result.discount;
+    }
+    const grand = Math.max(0, subtotal - scheme - couponDiscount + delivery);
     const orderNo = 'ZPL' + Math.floor(10000 + Math.random() * 90000);
 
     /* build the WhatsApp message */
@@ -891,7 +972,7 @@ if (placeOrder) {
     msg += `*Retailer:* ${name}\n*Phone:* ${phone}\n*Delivery Address:* ${address}\n`;
     if (salesRep) msg += `*Sales Representative:* ${salesRep}\n`;
     if (gstNo) msg += `*GST:* ${gstNo}\n`;
-    if (couponCode) msg += `*Discount Coupon:* ${couponCode}\n`;
+    if (couponCode) msg += `*Coupon Applied:* ${couponCode} (-${money(couponDiscount)})\n`;
     if (remarks) msg += `*Remarks:* ${remarks}\n`;
     msg += `--------------------------------\n*Items:*\n`;
     const priceViews = getCartPriceViews();
@@ -904,9 +985,11 @@ if (placeOrder) {
     msg += `--------------------------------\n`;
     msg += `Subtotal: ${money(subtotal)}\n`;
     if (scheme > 0) msg += `Scheme Discount: -${money(scheme)}\n`;
+    if (couponDiscount > 0) msg += `Coupon Discount: -${money(couponDiscount)}\n`;
     msg += `Delivery: ${delivery ? money(delivery) : 'FREE'}\n`;
     msg += `*Grand Total: ${money(grand)}*\n`;
     msg += `Payment: ${payment}\n`;
+
 
     /* save to local order history */
     const orders = getOrders();
@@ -916,7 +999,7 @@ if (placeOrder) {
         const view = priceViews[id] || 'wholesale';
         return { name: PMAP[id].name, qty: Number(cart[id]), priceView: view, line: priceForView(PMAP[id], view) * Number(cart[id]) };
       }),
-      itemCount: count, amount: grand, payment, name, phone, address, coupon: couponCode, remarks,
+      itemCount: count, amount: grand, payment, name, phone, address, coupon: couponCode, couponDiscount, remarks,
       status: 'Order Placed',
     });
     setOrders(orders);
@@ -1326,7 +1409,9 @@ function loadPolicyEditor() {
   if (!select || !editor) return;
   const key = select.value;
   const policy = getPolicies()[key];
-  editor.innerHTML = policy?.content || '<p>No policy content available.</p>';
+  /* Sanitize stored HTML before rendering — prevents stored XSS from Firestore policy content */
+  const rawContent = policy?.content || '<p>No policy content available.</p>';
+  editor.innerHTML = (window.DOMPurify ? DOMPurify.sanitize(rawContent) : rawContent);
   if (viewLink) viewLink.href = policyPageUrls[key] || '#';
 }
 
@@ -1339,7 +1424,11 @@ function renderPolicyPage() {
   const title = root.querySelector('[data-policy-title]');
   const content = root.querySelector('[data-policy-content]');
   if (title) title.textContent = policy.title;
-  if (content) content.innerHTML = policy.content;
+  if (content) {
+    /* Sanitize stored HTML before rendering — prevents stored XSS from Firestore policy content */
+    const rawContent = policy.content || '';
+    content.innerHTML = window.DOMPurify ? DOMPurify.sanitize(rawContent) : rawContent;
+  }
 }
 
 function seedClientsFromLocalData() {

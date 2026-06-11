@@ -163,15 +163,28 @@ sharedCollections.forEach((name) => {
 
 if (location.pathname.endsWith('/admin.html') || location.pathname.endsWith('admin.html')) {
   authReady.then(({ user, isAdmin }) => {
-    if (!user || !isAdmin) location.replace(`login.html?next=admin.html&reason=admin`);
-    if (isAdmin) {
-      onSnapshot(collection(db, 'orders'), (snapshot) => {
-        const items = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
-        const previous = localStorage.getItem(cacheKey('orders'));
-        const next = JSON.stringify(items);
-        localStorage.setItem(cacheKey('orders'), next);
-        if (previous !== next) scheduleRefresh('orders', items);
-      });
+    if (!user || !isAdmin) {
+      location.replace(`login.html?next=admin.html&reason=admin`);
+      return;
     }
+    /* Reveal body only after confirmed admin — prevents content flash for guests */
+    document.body.style.visibility = 'visible';
+    onSnapshot(collection(db, 'orders'), (snapshot) => {
+      const items = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+      const previous = localStorage.getItem(cacheKey('orders'));
+      const next = JSON.stringify(items);
+      localStorage.setItem(cacheKey('orders'), next);
+      if (previous !== next) scheduleRefresh('orders', items);
+    });
   });
 }
+
+/* Auth-gated B2B pages — redirect guests to login */
+const PROTECTED_PAGES = ['checkout.html', 'cart.html', 'my-orders.html', 'my-account.html'];
+const currentPage = location.pathname.split('/').pop() || 'index.html';
+if (PROTECTED_PAGES.some((page) => currentPage.endsWith(page))) {
+  authReady.then(({ user }) => {
+    if (!user) location.replace(`login.html?next=${encodeURIComponent(currentPage)}&reason=login`);
+  });
+}
+
