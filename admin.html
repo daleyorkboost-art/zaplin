@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="page-shell">
+      <main class="main-content">
+        <section class="admin-shell">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Operations</p>
+              <h1>Admin Dashboard</h1>
+            </div>
+            <span class="admin-save-state" data-admin-save-state>Connecting to Firebase...</span>
+          </div>
+          <p style="color:var(--muted);margin-top:-0.5rem">Authorized admin changes sync to Firestore and every open storefront device.</p>
+
+          <div class="section-block" id="migration">
+            <div class="section-heading"><div><h2>Firebase Data Migration</h2><p class="admin-help">One-time import of existing browser catalog data. Duplicate migration is blocked in Firestore.</p></div>
+              <button class="primary-action" type="button" data-migrate-local>Migrate Local Data to Firestore</button>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <article><span>Catalog Items</span><strong data-admin-total-products>0</strong></article>
+            <article><span>Total Stock</span><strong data-admin-total-stock>0</strong></article>
+            <article><span>Low Stock</span><strong data-admin-low-stock>0</strong></article>
+            <article><span>Clients</span><strong data-admin-total-clients>0</strong></article>
+          </div>
+
+          <div class="section-block" id="products">
+            <div class="section-heading">
+              <div>
+                <h2>Product Management</h2>
+                <p class="admin-help">Add products, upload pictures, edit prices, update stock, or delete Firestore catalog items.</p>
+              </div>
+              <div class="admin-actions">
+                <input type="search" placeholder="Search product or SKU" data-admin-stock-search>
+                <button class="secondary-action" data-admin-reset-stock>Reset Stock</button>
+              </div>
+            </div>
+            <form class="admin-product-form" data-admin-product-form>
+              <input type="hidden" data-product-field="id">
+              <label>Product Number<input data-product-field="productNumber" placeholder="Product number"></label>
+              <label>Product Name<input required data-product-field="name" placeholder="Product name"></label>
+              <label>SKU<input required data-product-field="sku" placeholder="SKU"></label>
+              <label>Brand<input required data-product-field="brand" placeholder="Brand"></label>
+              <label>Category<select required data-product-field="category"></select></label>
+              <label>MRP per Piece / Unit (&#8377;)<input type="number" min="0" step="0.01" required data-product-field="selling_mrp" placeholder="e.g. 20"></label>
+              <label>Retail Price (&#8377;)<input type="number" min="0" step="0.01" required data-product-field="mrp" placeholder="Retail price"></label>
+              <label>Wholesale Price (&#8377;)<input type="number" min="0" step="0.01" required data-product-field="trade" placeholder="Wholesale price"></label>
+              <label>Margin Percentage<input readonly data-product-field="marginPercentage" placeholder="Calculated automatically"></label>
+              <label>Pack Contains / Quantity<input data-product-field="unit" placeholder="e.g. 24 packets x 100 g"></label>
+              <label>Description<textarea data-product-field="description" placeholder="Product description"></textarea></label>
+              <label>Stock Qty<input type="number" min="0" data-product-field="stock" placeholder="Stock"></label>
+              <label>Reorder At<input type="number" min="0" data-product-field="reorder" placeholder="Reorder level"></label>
+              <label>Status<select data-product-field="active"><option value="true">Active</option><option value="false">Inactive</option></select></label>
+              <label class="admin-image-field">Product Picture<input type="file" accept="image/*" data-product-field="image"></label>
+              <div class="admin-upload-preview"><img data-product-preview src="assets/img/aloo-bhujia-wholesale-pack.svg" alt="Product preview"></div>
+              <div class="admin-form-actions">
+                <button class="primary-action" type="submit">Save Product</button>
+                <button class="secondary-action" type="button" data-admin-product-clear>Clear</button>
+              </div>
+            </form>
+            <div class="table-wrap"><table class="data-table admin-table">
+              <thead><tr><th>Pic</th><th>Product</th><th>SKU</th><th>Category</th><th>MRP / Unit</th><th>Retail Price</th><th>Wholesale Price</th><th>Pack Contains</th><th>Stock Qty</th><th>Reorder At</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody data-admin-stock></tbody>
+            </table></div>
+          </div>
+
+          <div class="section-block" id="coupons">
+            <div class="section-heading"><div><h2>Coupon Management</h2><p class="admin-help">Create, edit, enable, disable, and expire coupons.</p></div></div>
+            <form class="admin-product-form" data-coupon-form>
+              <input type="hidden" data-field="id">
+              <label>Coupon Code<input required data-field="code" placeholder="SAVE10"></label>
+              <label>Discount Type<select data-field="type"><option value="percentage">Percentage</option><option value="fixed">Fixed Amount</option></select></label>
+              <label>Discount Value<input required min="0" type="number" step="0.01" data-field="value"></label>
+              <label>Expiry Date<input type="date" data-field="expiryDate"></label>
+              <label>Status<select data-field="active"><option value="true">Active</option><option value="false">Disabled</option></select></label>
+              <div class="admin-form-actions"><button class="primary-action" type="submit">Save Coupon</button><button class="secondary-action" type="reset">Clear</button></div>
+            </form>
+            <div class="table-wrap"><table class="data-table admin-table"><thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead><tbody data-coupon-rows></tbody></table></div>
+          </div>
+
+          <div class="section-block" id="deals">
+            <div class="section-heading"><div><h2>Deal of the Day</h2><p class="admin-help">Select a product, deal window, price, countdown, and active state.</p></div></div>
+            <form class="admin-product-form" data-deal-form>
+              <input type="hidden" data-field="id">
+              <label>Product<select required data-field="productId"></select></label>
+              <label>Deal Price<input required min="0" type="number" step="0.01" data-field="dealPrice"></label>
+              <label>Start Date &amp; Time<input required type="datetime-local" data-field="startAt"></label>
+              <label>End Date &amp; Time<input required type="datetime-local" data-field="endAt"></label>
+              <label>Status<select data-field="active"><option value="true">Active</option><option value="false">Disabled</option></select></label>
+              <div class="admin-form-actions"><button class="primary-action" type="submit">Save Deal</button><button class="secondary-action" type="reset">Clear</button></div>
+            </form>
+            <div class="table-wrap"><table class="data-table admin-table"><thead><tr><th>Product</th><th>Deal Price</th><th>Starts</th><th>Ends</th><th>Status</th><th>Actions</th></tr></thead><tbody data-deal-rows></tbody></table></div>
+          </div>
+
+          <div class="section-block" id="categories">
+            <div class="section-heading">
+              <div>
+                <h2>Category Management</h2>
+                <p class="admin-help">Add, rename, replace images, activate, or remove storefront categories.</p>
+              </div>
+            </div>
+            <form class="admin-category-form" data-admin-category-form>
+              <input type="hidden" data-category-field="original-slug">
+              <label>Category Name<input required data-category-field="name" placeholder="Category name"></label>
+              <label>Unit Type<select data-category-field="unit_type">
+                <option value="packets">Packets (default - biscuits, snacks, dry goods)</option>
+                <option value="bottles">Bottles (soft drinks, water, bottled beverages)</option>
+                <option value="litres">Litres (oils, ghee, liquid by volume)</option>
+              </select></label>
+              <label>Status<select data-category-field="active"><option value="true">Active</option><option value="false">Inactive</option></select></label>
+              <label class="admin-image-field">Category Photo<input type="file" accept="image/*" data-category-field="image"></label>
+              <div class="admin-upload-preview"><img data-category-preview src="assets/img/categories/biscuits.jpg" alt="Category preview"></div>
+              <div class="admin-form-actions">
+                <button class="primary-action" type="submit">Save Category</button>
+                <button class="secondary-action" type="button" data-remove-category-image>Remove Image</button>
+                <button class="secondary-action" type="button" data-admin-category-clear>Clear</button>
+              </div>
+            </form>
+            <div class="table-wrap"><table class="data-table admin-table category-admin-table">
+              <thead><tr><th>Image</th><th>Category Name</th><th>Unit Type</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody data-admin-categories></tbody>
+            </table></div>
+          </div>
+
+          <div class="section-block" id="banners">
+            <div class="section-heading">
+              <div>
+                <h2>Banner Management</h2>
+                <p class="admin-help">Add, edit, reorder, enable, or remove homepage hero slides.</p>
+              </div>
+            </div>
+            <form class="admin-banner-form" data-admin-banner-form>
+              <input type="hidden" data-banner-field="id">
+              <label>Title<input required data-banner-field="title" placeholder="Banner title"></label>
+              <label>Subtitle<input data-banner-field="subtitle" placeholder="Supporting text"></label>
+              <label>Button Text<input data-banner-field="buttonText" placeholder="Shop Now"></label>
+              <label>Button Link<input data-banner-field="buttonUrl" placeholder="search.html"></label>
+              <label>Sort Order<input type="number" min="0" data-banner-field="sortOrder" value="0"></label>
+              <label>Status<select data-banner-field="active"><option value="true">Active</option><option value="false">Inactive</option></select></label>
+              <label class="admin-image-field">Banner Image<input type="file" accept="image/*" data-banner-field="image"></label>
+              <div class="admin-banner-preview"><img data-banner-preview src="assets/img/zaplin-banner-glow.png" alt="Banner preview"></div>
+              <div class="admin-form-actions">
+                <button class="primary-action" type="submit">Save Banner</button>
+                <button class="secondary-action" type="button" data-remove-banner-image>Remove Image</button>
+                <button class="secondary-action" type="button" data-admin-banner-clear>Clear</button>
+              </div>
+            </form>
+            <div class="table-wrap"><table class="data-table admin-table banner-admin-table">
+              <thead><tr><th>Preview</th><th>Title</th><th>Button</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody data-admin-banners></tbody>
+            </table></div>
+          </div>
+
+          <div class="section-block" id="brands">
+            <div class="section-heading">
+              <div>
+                <h2>Top Brands Management</h2>
+                <p class="admin-help">Choose the brands and logos shown in the homepage Top Brands row.</p>
+              </div>
+            </div>
+            <form class="admin-brand-form" data-admin-brand-form>
+              <input type="hidden" data-brand-field="original-name">
+              <label>Brand Name<input required data-brand-field="name" placeholder="Brand name"></label>
+              <label>Sort Order<input type="number" min="0" data-brand-field="sortOrder" value="0"></label>
+              <label>Status<select data-brand-field="active"><option value="true">Active</option><option value="false">Inactive</option></select></label>
+              <label class="admin-image-field">Brand Logo<input type="file" accept="image/*" data-brand-field="logo"></label>
+              <div class="admin-upload-preview brand-upload-preview"><img data-brand-preview src="assets/img/zaplin-logo.png" alt="Brand logo preview"></div>
+              <div class="admin-form-actions">
+                <button class="primary-action" type="submit">Save Brand</button>
+                <button class="secondary-action" type="button" data-remove-brand-logo>Remove Logo</button>
+                <button class="secondary-action" type="button" data-admin-brand-clear>Clear</button>
+              </div>
+            </form>
+            <div class="table-wrap"><table class="data-table admin-table brand-admin-table">
+              <thead><tr><th>Logo</th><th>Brand</th><th>Order</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody data-admin-brands></tbody>
+            </table></div>
+          </div>
+
+          <div class="section-block" id="policies">
+            <div class="section-heading">
+              <div>
+                <h2>Policy Management</h2>
+                <p class="admin-help">Edit the policy pages without changing website files.</p>
+              </div>
+              <label class="policy-picker">Policy<select data-policy-select>
+                <option value="privacy">Privacy Policy</option>
+                <option value="refund">Refund Policy</option>
+                <option value="shipping">Shipping &amp; Delivery Policy</option>
+                <option value="terms">Terms &amp; Conditions</option>
+              </select></label>
+            </div>
+            <div class="rich-editor">
+              <div class="rich-editor-toolbar" aria-label="Text formatting">
+                <button type="button" data-editor-command="bold"><b>B</b></button>
+                <button type="button" data-editor-command="italic"><i>I</i></button>
+                <button type="button" data-editor-command="insertUnorderedList">List</button>
+                <button type="button" data-editor-format="h2">Heading</button>
+                <button type="button" data-editor-format="p">Paragraph</button>
+              </div>
+              <div class="policy-editor" contenteditable="true" data-policy-editor aria-label="Policy content editor"></div>
+            </div>
+            <div class="admin-form-actions policy-actions">
+              <button class="primary-action" type="button" data-save-policy>Save Policy</button>
+              <a class="secondary-action" data-view-policy href="privacy-policy.html" target="_blank">View Page</a>
+            </div>
+          </div>
+
+          <div class="section-block" id="clients">
+            <div class="section-heading">
+              <div>
+                <h2>Client Management</h2>
+                <p class="admin-help">Add retailers, track credit limits, and update account status.</p>
+              </div>
+            </div>
+            <form class="admin-client-form" data-admin-client-form>
+              <input type="hidden" data-client-field="id">
+              <label>Business Name<input required data-client-field="business" placeholder="Retailer business"></label>
+              <label>Owner<input required data-client-field="owner" placeholder="Owner name"></label>
+              <label>Mobile<input required data-client-field="mobile" placeholder="Phone number"></label>
+              <label>City<input data-client-field="city" placeholder="City"></label>
+              <label>GST<input data-client-field="gst" placeholder="GST number"></label>
+              <label>Credit Limit<input type="number" min="0" step="100" data-client-field="credit" placeholder="0"></label>
+              <label>Status<select data-client-field="status"><option>Active</option><option>Pending</option><option>Suspended</option></select></label>
+              <div class="admin-form-actions">
+                <button class="primary-action" type="submit">Save Client</button>
+                <button class="secondary-action" type="button" data-admin-client-clear>Clear</button>
+              </div>
+            </form>
+            <div class="section-heading admin-subhead">
+              <h3>Client List</h3>
+              <input type="search" placeholder="Search clients" data-admin-client-search>
+            </div>
+            <div class="table-wrap"><table class="data-table admin-table">
+              <thead><tr><th>Business</th><th>Owner</th><th>Mobile</th><th>City</th><th>Credit</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody data-admin-clients></tbody>
+            </table></div>
+          </div>
+
+          <div class="section-block" id="orders">
+            <h2>Recent Orders</h2>
+            <div class="table-wrap"><table class="data-table">
+              <thead><tr><th>Order</th><th>Date</th><th>Retailer</th><th>Phone</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody data-admin-orders></tbody>
+            </table></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="assets/js/products.js?v=20260607-ui6"></script>
+  <script src="assets/js/policies.js?v=20260607-ui6"></script>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script src="assets/js/app.js?v=20260607-ui6" defer></script>
+  <script src="assets/js/admin-modules.js?v=20260611" defer></script>
+</body>
+</html>
+
+
+
+
+
+

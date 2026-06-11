@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body class="auth-body premium-auth-body">
+  <main class="auth-layout premium-auth-layout">
+    <section class="auth-brand premium-auth-brand">
+      <img src="assets/img/zaplin-logo.png" alt="Zaplin">
+      <span></span>
+      <p>Saara Samaan Ek Jagah Se</p>
+      <small>Your trusted wholesale partner for groceries, FMCG and daily essentials.</small>
+    </section>
+    <section class="auth-card premium-auth-card">
+      <h2>Welcome back</h2>
+      <p>Login to continue your Zaplin wholesale orders.</p>
+      <form class="form-grid" data-login-form>
+        <label>Email<input type="email" required data-login-email placeholder="Enter your email"></label>
+        <label>Password<input type="password" required data-login-password placeholder="Enter your password"></label>
+        <button class="primary-action full" type="submit">Login</button>
+        <div class="auth-divider full"><span>OR</span></div>
+        <button class="secondary-action full google-action" type="button" data-google-auth>Continue with Google</button>
+        <p class="auth-note full" hidden data-auth-message></p>
+      </form>
+      <p class="auth-switch">New to Zaplin? <a href="register.html">Create account</a></p>
+    </section>
+    <section class="login-trust-section" aria-label="Zaplin trust features">
+      <div>Trusted by Thousands of Retailers</div>
+      <div>Best Wholesale Prices</div>
+      <div>Wide Range of Products</div>
+      <div>Fast &amp; Reliable Delivery</div>
+    </section>
+  </main>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-init.js?v=20260611"></script>
+</body>
+</html>
+
+
+
+
+

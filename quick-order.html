@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quick Order - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" type="button" data-toggle-sidebar><span></span><span></span><span></span></button>
+        <form class="searchbar" action="search.html" method="get"><input name="q" placeholder="Search by product name / brand / SKU" data-autocomplete autocomplete="off"><button>Search</button><div class="autocomplete" data-autocomplete-results hidden></div></form>
+        <a class="cart-pill" href="cart.html">Cart <span data-cart-count>0</span></a>
+      </header>
+      <main class="main-content">
+        <section class="quick-order-layout">
+          <div class="section-block">
+            <div class="section-heading"><h1>Quick Order</h1><a href="assets/zaplin-quick-order-template.csv" download>Download Excel Template</a></div>
+            <label class="wide-label">Add products by name, brand, or SKU
+              <span style="position:relative;display:block">
+                <input placeholder="Type at least 2 characters" data-qo-search autocomplete="off">
+                <span class="autocomplete" data-qo-results hidden></span>
+              </span>
+            </label>
+            <div class="table-wrap"><table class="data-table">
+              <thead><tr><th>Name</th><th>MRP</th><th>Trade Price</th><th>Qty</th><th>Line Total</th><th>Delete</th></tr></thead>
+              <tbody data-qo-body></tbody>
+            </table></div>
+          </div>
+          <aside class="summary-panel">
+            <h2>Cart Summary</h2>
+            <p><span>Subtotal</span><strong data-qo-subtotal>&#8377;0</strong></p>
+            <p class="save"><span>Scheme Discount</span><strong data-qo-scheme>-&#8377;0</strong></p>
+            <p><span>Delivery</span><strong data-qo-delivery>FREE</strong></p>
+            <p class="grand"><span>Grand Total</span><strong data-qo-grand>&#8377;0</strong></p>
+            <a class="primary-action full" href="cart.html" data-qo-add-all>Add All to Cart</a>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="assets/js/products.js?v=20260607-ui6"></script>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script src="assets/js/app.js?v=20260611" defer></script>
+</body>
+</html>
+
+
+
+
+

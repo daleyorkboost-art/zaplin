@@ -1,0 +1,61 @@
+# ============================
+# Firebase Secrets (NEVER commit real keys)
+# ============================
+assets/js/firebase-config.js
+
+# ============================
+# Node / npm
+# ============================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ============================
+# Firebase
+# ============================
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+database-debug.log
+.firebaserc
+
+# ============================
+# Environment & Secrets
+# ============================
+.env
+.env.*
+*.secret
+*.key
+service-account*.json
+*-adminsdk-*.json
+
+# ============================
+# OS / Editor
+# ============================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# ============================
+# Build / Temp
+# ============================
+dist/
+build/
+tmp/
+*.log
+*.tmp
+
+# ============================
+# Sensitive / Local-only docs
+# ============================
+HOSTINGER_STATIC_UPLOAD.txt

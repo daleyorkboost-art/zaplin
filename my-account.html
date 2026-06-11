@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Account - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" type="button" data-toggle-sidebar><span></span><span></span><span></span></button>
+        <form class="searchbar" action="search.html" method="get"><input name="q" placeholder="Search by product name / brand / SKU" data-autocomplete autocomplete="off"><button>Search</button><div class="autocomplete" data-autocomplete-results hidden></div></form>
+        <a class="cart-pill" href="cart.html">Cart <span data-cart-count>0</span></a>
+      </header>
+      <main class="main-content account-page">
+        <section class="section-block account-card" data-account-form>
+          <div class="account-title"><h1>My Account</h1><p>Saved here on this device and used to pre-fill your WhatsApp checkout.</p></div>
+          <form class="form-grid account-form-grid">
+            <label>Business Name<input data-acc="business" placeholder="Shop name"></label>
+            <label>Owner Name<input data-acc="owner" placeholder="Owner full name"></label>
+            <label>Mobile<input data-acc="mobile" placeholder="10-digit mobile number"></label>
+            <label>Email<input data-acc="email" type="email" placeholder="you@example.com"></label>
+            <label>GST optional<input data-acc="gst" placeholder="GSTIN (optional)"></label>
+            <label>City<input data-acc="city" placeholder="City"></label>
+            <label class="wide-label">Default Delivery Address<textarea data-acc="address" rows="3" placeholder="Shop / Warehouse / Delivery Address"></textarea></label>
+            <label>Pincode<input data-acc="pincode" placeholder="Pincode"></label>
+            <button class="primary-action full account-save" type="button" data-save-profile>Save Changes</button>
+            <p data-save-note hidden class="save-note"></p>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="assets/js/products.js?v=20260607-ui6"></script>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script src="assets/js/app.js?v=20260611" defer></script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" type="button" data-toggle-sidebar><span></span><span></span><span></span></button>
+        <form class="searchbar" action="search.html" method="get"><input name="q" placeholder="Search by product name / brand / SKU" data-autocomplete autocomplete="off"><button>Search</button><div class="autocomplete" data-autocomplete-results hidden></div></form>
+        <a class="cart-pill" href="cart.html">Cart <span data-cart-count>0</span></a>
+      </header>
+      <main class="main-content product-detail-page" data-product-detail>
+        <nav class="breadcrumb"><a href="index.html">Home</a><span>›</span><a data-pd-crumb-cat href="category-biscuits.html">Biscuits</a><span>›</span><strong data-pd-crumb-name>Product</strong></nav>
+        <a class="secondary-action back-link" href="category-biscuits.html">‹ Back to Biscuits</a>
+        <section class="pd-stage">
+          <div class="pd-gallery-card">
+            <label class="brand-picker">Brand<select data-pd-brand><option>Parle</option></select></label>
+            <button class="pd-arrow" type="button" aria-label="Previous product">‹</button>
+            <img data-pd-img src="assets/img/parle-g-gold-family-pack.svg" alt="">
+            <button class="pd-arrow" type="button" aria-label="Next product">›</button>
+            <div class="pd-dots"><span></span><span></span><span></span><span></span><span></span></div>
+          </div>
+          <aside class="pd-info-card">
+            <h1 data-pd-name>Product</h1>
+            <p class="pd-meta"><span data-pd-eyebrow>Brand · SKU</span></p>
+            <p class="stock-note" data-pd-stock>40 in stock</p>
+            <div class="dual-price-row pd-prices">
+              <div class="price-option active" data-price-option="wholesale"><span>Wholesale Price</span><strong data-pd-wholesale>&#8377;0</strong><small>/ pack</small></div>
+              <div class="price-option" data-price-option="retail"><span>Retail Price</span><strong data-pd-retail>&#8377;0</strong><small>/ pack</small></div>
+            </div>
+            <div class="price-view-row pd-view-row">
+              <span>View price as:</span>
+              <label><input type="radio" name="pd-price-view" value="wholesale" checked> Wholesale</label>
+              <label><input type="radio" name="pd-price-view" value="retail"> Retail</label>
+            </div>
+            <div class="margin-panel"><strong><span data-pd-margin>0</span>% Margin</strong><p data-pd-margin-copy>Retail price is higher than wholesale price</p></div>
+            <div class="pd-specs">
+              <span><b>MRP per unit:</b> <em data-pd-mrp>&#8377;0</em></span>
+              <span><b>Pack contains:</b> <em data-pd-pack>12 packs</em></span>
+              <span><b>SKU:</b> <em data-pd-sku>BIS-PAR-001</em></span>
+            </div>
+            <button class="primary-action full" data-add-cart="101">Add to Cart</button>
+          </aside>
+        </section>
+        <div class="info-strip">Margin % will change automatically when you switch between Wholesale and Retail price views.</div>
+      </main>
+    </div>
+  </div>
+  <script src="assets/js/products.js?v=20260607-ui6"></script>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script src="assets/js/app.js?v=20260611" defer></script>
+  <script>
+    document.querySelector('[data-qty-minus]')?.addEventListener('click', () => {
+      const i = document.querySelector('[data-qty]'); i.value = Math.max(1, Number(i.value || 1) - 1);
+    });
+    document.querySelector('[data-qty-plus]')?.addEventListener('click', () => {
+      const i = document.querySelector('[data-qty]'); i.value = Number(i.value || 1) + 1;
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+

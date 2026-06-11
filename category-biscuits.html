@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Categories - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" type="button" data-toggle-sidebar><span></span><span></span><span></span></button>
+        <form class="searchbar" action="search.html" method="get"><input name="q" placeholder="Search by product name / brand / SKU" data-autocomplete autocomplete="off"><button>Search</button><div class="autocomplete" data-autocomplete-results hidden></div></form>
+        <a class="cart-pill" href="cart.html">Cart <span data-cart-count>0</span></a>
+      </header>
+      <main class="main-content">
+        <nav class="breadcrumb"><a href="index.html">Home</a><span>›</span><span>Categories</span><span>›</span><strong data-cat-name>All Categories</strong></nav>
+        <section class="catalog-results centered-catalog">
+          <div class="section-heading catalog-toolbar">
+            <div>
+              <h1 data-cat-name>All Categories</h1>
+              <p data-cat-subtitle>Choose a category or browse all products.</p>
+            </div>
+            <label>Search<input data-category-search type="search" placeholder="Search product, brand, or SKU"></label>
+          </div>
+          <div class="category-filter-panel" aria-label="Product filters">
+            <label>Category
+              <select data-filter-category>
+                <option value="">Select Category</option>
+              </select>
+            </label>
+            <label>Brand
+              <select data-filter-brand disabled>
+                <option value="">Select category first</option>
+              </select>
+            </label>
+            <label>Price Range
+              <select data-price-range>
+                <option value="">All Prices</option>
+                <option value="0-500">Under &#8377;500</option>
+                <option value="500-1000">&#8377;500 - &#8377;1,000</option>
+                <option value="1000-2500">&#8377;1,000 - &#8377;2,500</option>
+                <option value="2500-999999">Above &#8377;2,500</option>
+              </select>
+            </label>
+            <label>Sort By
+              <select data-sort>
+                <option value="newest">Newest</option>
+                <option value="price-low">Price Low to High</option>
+                <option value="price-high">Price High to Low</option>
+                <option value="margin-high">Margin High to Low</option>
+              </select>
+            </label>
+          </div>
+          <div class="product-grid" data-grid="category"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="assets/js/products.js?v=20260607-ui6"></script>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script src="assets/js/app.js?v=20260611" defer></script>
+</body>
+</html>
+
+
+
+
+
+

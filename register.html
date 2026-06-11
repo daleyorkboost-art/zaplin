@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body class="auth-body premium-auth-body">
+  <main class="auth-layout premium-auth-layout">
+    <section class="auth-brand premium-auth-brand"><img src="assets/img/zaplin-logo.png" alt="Zaplin"><span></span><p>Saara Samaan Ek Jagah Se</p></section>
+    <section class="auth-card premium-auth-card">
+      <h2>Create retailer account</h2>
+      <p>Start ordering wholesale grocery inventory for your shop.</p>
+      <form class="form-grid" data-register-form>
+        <label>Business Name<input required data-register-business></label>
+        <label>Owner Name<input required data-register-owner></label>
+        <label>Mobile Number<input required data-register-mobile></label>
+        <label>Email<input type="email" required data-register-email></label>
+        <label>Password<input type="password" required data-register-password></label>
+        <label>Confirm Password<input type="password" required data-register-confirm></label>
+        <label>City/Pincode<input required data-register-city></label>
+        <label>GST Number (optional)<input data-register-gst></label>
+        <button class="primary-action full" type="submit">Register</button>
+        <button class="secondary-action full" type="button" data-google-auth>Create account with Google</button>
+        <p class="auth-note full" hidden data-auth-message></p>
+      </form>
+      <p class="auth-switch">Already registered? <a href="login.html">Login</a></p>
+    </section>
+  </main>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-init.js?v=20260611"></script>
+</body>
+</html>
+
+
+
+
+
+

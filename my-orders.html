@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Orders - Zaplin</title>
+  <link rel="icon" href="assets/img/zaplin-logo.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260607-ui6">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar"></aside>
+    <div class="page-shell">
+      <header class="topbar">
+        <button class="icon-button mobile-menu" type="button" data-toggle-sidebar><span></span><span></span><span></span></button>
+        <form class="searchbar" action="search.html" method="get"><input name="q" placeholder="Search by product name / brand / SKU" data-autocomplete autocomplete="off"><button>Search</button><div class="autocomplete" data-autocomplete-results hidden></div></form>
+        <a class="cart-pill" href="cart.html">Cart <span data-cart-count>0</span></a>
+      </header>
+      <main class="main-content">
+        <section class="section-block">
+          <div class="section-heading"><h1>My Orders</h1><a href="search.html">Shop Products</a></div>
+          <div class="table-wrap"><table class="data-table">
+            <thead><tr><th>Order ID</th><th>Date</th><th>Items</th><th>Amount</th><th>Status</th><th>Payment</th></tr></thead>
+            <tbody data-orders-body></tbody>
+          </table></div>
+        </section>
+      </main>
+    </div>
+  </div>
+  <script src="assets/js/products.js?v=20260607-ui6"></script>
+  <script src="assets/js/firebase-config.js?v=20260611"></script>
+  <script type="module" src="assets/js/firebase-data.js?v=20260611"></script>
+  <script src="assets/js/app.js?v=20260611" defer></script>
+</body>
+</html>
+
+
+
+
+

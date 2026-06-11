@@ -1,0 +1,8 @@
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^privacy-policy/?$ privacy-policy.html [L]
+RewriteRule ^refund-policy/?$ refund-policy.html [L]
+RewriteRule ^shipping-delivery-policy/?$ shipping-delivery-policy.html [L]
+RewriteRule ^terms-and-conditions/?$ terms-and-conditions.html [L]

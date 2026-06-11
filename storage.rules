@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isAdmin() {
+      return request.auth != null
+        && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.active != false;
+    }
+    match /{folder}/{fileName} {
+      allow read: if folder in ['products', 'categories', 'brands', 'banners', 'logos'];
+      allow write: if isAdmin()
+        && folder in ['products', 'categories', 'brands', 'banners', 'logos']
+        && request.resource.size < 8 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+  }
+}
+
